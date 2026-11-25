@@ -41,8 +41,10 @@ openssl rand -base64 32
 heroku config:set --app my-panel \
   MECHON_SECRET_KEY='paste-the-base64-key'
 
-# Optional: only needed if you use a custom domain instead of the herokuapp.com one
-heroku config:set --app my-panel MECHON_PUBLIC_URL=https://panel.example.com
+# Public URL. Heroku suffixes the default domain (my-panel-f47059b55334.herokuapp.com),
+# so copy it from `heroku apps:info` rather than guessing from the app name. Omit the var
+# entirely and the panel derives it from HEROKU_APP_DEFAULT_DOMAIN_NAME, which is correct.
+heroku config:set --app my-panel MECHON_PUBLIC_URL=https://my-panel-f47059b55334.herokuapp.com
 
 # 4. Deploy (heroku.yml tells Heroku to build the Dockerfile)
 git push heroku main

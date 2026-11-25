@@ -12,7 +12,7 @@
       "required": true
     },
     "MECHON_PUBLIC_URL": {
-      "description": "Public https URL of this app, e.g. https://my-panel.herokuapp.com. Leave blank to derive it from the Heroku app domain.",
+      "description": "Public https URL of this app. Heroku suffixes the default domain (e.g. https://my-panel-f47059b55334.herokuapp.com), so copy it from the app info. Leave blank to derive it from the Heroku app domain, which is always correct.",
       "required": false
     },
     "MECHON_TRUST_PROXY": {
