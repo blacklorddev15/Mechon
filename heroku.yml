@@ -1,0 +1,17 @@
+# Heroku container deploy. `git push heroku main` builds the Dockerfile and releases it.
+#
+# Heroku assigns the port through $PORT; the panel binds it automatically. Everything else comes
+# from config vars: MECHON_SECRET_KEY, and optionally MECHON_PUBLIC_URL (otherwise it is derived
+# from the app's Heroku domain). DATABASE_URL is injected by the Heroku Postgres add-on.
+#
+# See docs/heroku.md. Bots do NOT run here: a node (mechon-agent) needs Docker and root.
+build:
+  docker:
+    web: Dockerfile
+run:
+  web: /usr/local/bin/mechon serve
+setup:
+  addons:
+    - plan: heroku-postgresql
+  config:
+    MECHON_TRUST_PROXY: "true"

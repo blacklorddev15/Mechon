@@ -1,0 +1,30 @@
+{
+  "name": "mechon-panel",
+  "description": "Mechon panel: the web UI and API for a self-hosted Discord bot host. Bots themselves need a Docker node.",
+  "repository": "https://github.com/jub0t/mechon",
+  "logo": "https://raw.githubusercontent.com/jub0t/Mechon/main/assets/screens/overview.png",
+  "stack": "container",
+  "keywords": ["discord", "bots", "hosting", "panel", "pterodactyl", "golang"],
+  "addons": ["heroku-postgresql:essential-0"],
+  "env": {
+    "MECHON_SECRET_KEY": {
+      "description": "Encrypts bot secrets at rest. 32 random bytes, base64. Generate with `mechon keygen`, or `openssl rand -base64 32`. Keep a copy: losing it makes stored bot secrets unreadable.",
+      "required": true
+    },
+    "MECHON_PUBLIC_URL": {
+      "description": "Public https URL of this app, e.g. https://my-panel.herokuapp.com. Leave blank to derive it from the Heroku app domain.",
+      "required": false
+    },
+    "MECHON_TRUST_PROXY": {
+      "description": "Keep true: the Heroku router forwards the real client IP.",
+      "value": "true"
+    }
+  },
+  "formation": {
+    "web": {
+      "quantity": 1
+    }
+  },
+  "scripts": {},
+  "buildpacks": []
+}

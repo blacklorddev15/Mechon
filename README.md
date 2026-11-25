@@ -73,6 +73,10 @@ createdb mechon_dev && make web && make seed   # admin@mechon.test / dev-passwor
 make run                                       # then open http://localhost:8080
 ```
 
+On Heroku: the **panel only** ships as a container (`Dockerfile`, `heroku.yml`, `app.json`). Bots still
+need a node with Docker on a real server, because a dyno has no Docker daemon and no persistent disk —
+see [docs/heroku.md](docs/heroku.md) for the deploy, the caveats and why.
+
 > [!WARNING]
 > Mechon is in **preview**. Every [milestone](docs/spec-v0.md#11-build-order) is built and tested end to end, including a suite of isolation attacks that must all fail, but it has not run in production yet. Next up: a CLI, AI agent templates and the first release.
 

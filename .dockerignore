@@ -1,0 +1,15 @@
+.git
+.gitignore
+.github
+bin
+data
+*.md
+!README.md
+web/node_modules
+web/dist
+web/*.tsbuildinfo
+assets/src
+Dockerfile
+.dockerignore
+heroku.yml
+app.json

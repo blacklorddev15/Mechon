@@ -95,6 +95,15 @@ func serve(ctx context.Context) error {
 	if err != nil {
 		return err
 	}
+	// PaaS warning: the panel's control plane can live on an ephemeral host, but nothing that
+	// needs a container, a Docker socket or a persistent disk can.
+	if cfg.OnHeroku {
+		slog.Warn("running on Heroku: this process is the panel only; bots need a Docker node (mechon-agent) on a real server")
+	}
+	if cfg.EphemeralData() {
+		slog.Warn("data directory is ephemeral: uploaded deploy artifacts are lost on every restart",
+			"data_dir", cfg.DataDir)
+	}
 	go srv.Background(ctx)
 	if err := srv.StartJobs(ctx); err != nil {
 		return err

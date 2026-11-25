@@ -6,7 +6,7 @@ TEST_DATABASE_URL ?= postgres:///mechon_test?host=/tmp
 DEV_SECRET_KEY ?= ZGV2LW9ubHktbWVjaG9uLXNlY3JldC1rZXktMzJieXQ=
 DEV_ENV = MECHON_DATABASE_URL="$(DATABASE_URL)" MECHON_SECRET_KEY="$(DEV_SECRET_KEY)" MECHON_DATA_DIR=./data
 
-.PHONY: build web panel run dev-panel dev-web seed test generate
+.PHONY: build web panel run dev-panel dev-web seed test generate docker heroku heroku-init
 
 build: web panel
 
@@ -43,3 +43,21 @@ test:
 
 generate:
 	sqlc generate
+
+# ---- Container and Heroku ---------------------------------------------------------------------
+# The panel image needs no local Go or Node: everything is built inside the Dockerfile.
+APP ?= mechon-panel
+EMAIL ?= you@example.com
+NAME ?= Your Name
+
+docker:
+	docker build -t mechon-panel .
+
+# Heroku container registry. `git push heroku main` does the same thing through heroku.yml.
+heroku:
+	heroku container:push web -a $(APP)
+	heroku container:release web -a $(APP)
+
+# First admin on Heroku (run once, after the release is live).
+heroku-init:
+	heroku run -a $(APP) /usr/local/bin/mechon init --email $(EMAIL) --name "$(NAME)"
