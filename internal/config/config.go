@@ -26,6 +26,8 @@ type Panel struct {
 	SecretKey   string   // MECHON_SECRET_KEY, required: encrypts bot secrets at rest
 	DataDir     string   // MECHON_DATA_DIR, default "./data": uploaded artifacts live here
 	OnHeroku    bool     // DYNO is set: running inside a Heroku dyno
+	SignupOpen  bool     // MECHON_SIGNUP: "closed" disables public registration, default open
+	TrialPlan   string   // MECHON_TRIAL_PLAN: plan slug a new account starts on, default cheapest
 }
 
 func LoadPanel() (Panel, error) {
@@ -37,6 +39,8 @@ func LoadPanel() (Panel, error) {
 		SecretKey:   os.Getenv("MECHON_SECRET_KEY"),
 		DataDir:     dataDir(onHeroku),
 		OnHeroku:    onHeroku,
+		SignupOpen:  os.Getenv("MECHON_SIGNUP") != "closed",
+		TrialPlan:   os.Getenv("MECHON_TRIAL_PLAN"),
 	}
 	var errs []error
 	if c.DatabaseURL == "" {

@@ -1,7 +1,7 @@
 import { ArrowRight, Eye, EyeOff, Loader2 } from 'lucide-react'
 import { motion, useAnimationControls, useReducedMotion } from 'motion/react'
 import { type FormEvent, useState } from 'react'
-import { Navigate, useNavigate, useSearchParams } from 'react-router'
+import { Link, Navigate, useNavigate, useSearchParams } from 'react-router'
 import { SlatField } from '@/components/backdrop/slat-field'
 import { Logo } from '@/components/brand/logo'
 import { Reveal } from '@/components/motion/reveal'
@@ -141,6 +141,12 @@ export function LoginPage() {
             </form>
           </motion.div>
           <p className="mt-6 text-center text-[13px] text-faint-foreground">
+            New here?{' '}
+            <Link to="/signup" className="font-semibold text-muted-foreground hover:text-foreground">
+              Create an account
+            </Link>
+          </p>
+          <p className="mt-3 text-center text-[13px] text-faint-foreground">
             Forgot your password?{' '}
             {site.data?.supportUrl ? (
               <a href={site.data.supportUrl} target="_blank" rel="noreferrer" className="font-semibold text-muted-foreground hover:text-foreground">

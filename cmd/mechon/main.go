@@ -108,6 +108,7 @@ func serve(ctx context.Context) error {
 	if err := srv.StartJobs(ctx); err != nil {
 		return err
 	}
+	srv.StartBilling(ctx)
 
 	hs := &http.Server{
 		Addr:              cfg.Listen,

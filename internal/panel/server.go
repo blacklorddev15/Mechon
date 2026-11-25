@@ -36,6 +36,7 @@ type Server struct {
 
 	loginByIP    *limiter
 	loginByEmail *limiter
+	signupByIP   *limiter
 	apiByIP      *limiter
 }
 
@@ -58,7 +59,10 @@ func New(cfg config.Panel, pool *pgxpool.Pool, web fs.FS) (*Server, error) {
 		artifactDir:  dir,
 		loginByIP:    newLimiter(30, 15*time.Minute),
 		loginByEmail: newLimiter(10, 15*time.Minute),
-		apiByIP:      newLimiter(1200, time.Minute),
+		// Registration is far more expensive than a login (hashing, possibly a plan), so the
+		// budget is small and the window is long.
+		signupByIP: newLimiter(5, time.Hour),
+		apiByIP:    newLimiter(1200, time.Minute),
 	}
 	s.hub = newHub(s)
 
@@ -102,6 +106,7 @@ func (s *Server) Handler() http.Handler {
 
 	api.HandleFunc("GET /api/v1/health", s.health)
 	api.HandleFunc("POST /api/v1/auth/login", s.login)
+	api.HandleFunc("POST /api/v1/auth/signup", s.signup)
 	route("POST /api/v1/auth/logout", session, s.logout)
 
 	route("GET /api/v1/me", signedIn, s.me)

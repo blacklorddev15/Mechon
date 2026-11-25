@@ -249,6 +249,7 @@ export type SiteSettings = { brandName: string; supportUrl: string }
 export const api = {
   health: () => get<{ status: string }>('/health'),
   login: (email: string, password: string) => post<User>('/auth/login', { email, password }),
+  signup: (b: { email: string; name: string; password: string; planSlug?: string }) => post<User>('/auth/signup', b),
   logout: () => post<void>('/auth/logout'),
 
   me: () => get<User>('/me'),

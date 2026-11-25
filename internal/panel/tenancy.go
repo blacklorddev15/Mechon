@@ -49,6 +49,10 @@ type planInput struct {
 	PidsMax       int32    `json:"pidsMax"`
 	Hardened      bool     `json:"hardened"`
 	Templates     []string `json:"templates"`
+	// Billing. Not part of the generated queries, which predate period-based plans.
+	PriceCents *int    `json:"priceCents"`
+	Interval   *string `json:"interval"`
+	TrialDays  *int    `json:"trialDays"`
 }
 
 var slugRe = regexp.MustCompile(`^[a-z0-9][a-z0-9-]{0,62}$`)
@@ -123,6 +127,10 @@ func (s *Server) createPlan(w http.ResponseWriter, r *http.Request) {
 		writeError(w, r, err)
 		return
 	}
+	if err := s.setPlanBilling(r.Context(), p.ID, in.PriceCents, in.Interval, in.TrialDays); err != nil {
+		writeError(w, r, errBadRequest("Price, interval or trial days are invalid."))
+		return
+	}
 	s.audit(r, "plan.create", "plan", p.ID.String(), p.Name, map[string]any{"slug": p.Slug})
 	writeJSON(w, http.StatusCreated, toPlanJSON(p, 0))
 }
@@ -148,6 +156,10 @@ func (s *Server) updatePlan(w http.ResponseWriter, r *http.Request) {
 		CpuMillicores: in.CPUMillicores, DiskMb: in.DiskMB, PidsMax: in.PidsMax, Hardened: in.Hardened, Templates: in.Templates})
 	if err != nil {
 		writeError(w, r, notFoundIfNoRows(err))
+		return
+	}
+	if err := s.setPlanBilling(r.Context(), p.ID, in.PriceCents, in.Interval, in.TrialDays); err != nil {
+		writeError(w, r, errBadRequest("Price, interval or trial days are invalid."))
 		return
 	}
 	s.audit(r, "plan.update", "plan", p.ID.String(), p.Name, map[string]any{"memoryMb": p.MemoryMb, "cpuMillicores": p.CpuMillicores, "diskMb": p.DiskMb, "maxBots": p.MaxBots})

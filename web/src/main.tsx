@@ -13,6 +13,7 @@ import { AccountPage } from '@/routes/account'
 import { BotPage } from '@/routes/bot'
 import { BotsPage } from '@/routes/bots'
 import { LoginPage } from '@/routes/login'
+import { SignupPage } from '@/routes/signup'
 import { NodesPage } from '@/routes/nodes'
 import { PlansPage } from '@/routes/plans'
 import { SettingsPage } from '@/routes/settings'
@@ -88,6 +89,7 @@ createRoot(document.getElementById('root')!).render(
         <BrowserRouter>
           <Routes>
             <Route path="/login" element={<LoginPage />} />
+            <Route path="/signup" element={<SignupPage />} />
             <Route element={<Protected />}>
               <Route index element={<Home />} />
               <Route path="bots" element={<BotsPage />} />

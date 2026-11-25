@@ -27,6 +27,14 @@ export function useLogin() {
   })
 }
 
+export function useSignup() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (b: { email: string; name: string; password: string; planSlug?: string }) => api.signup(b),
+    onSuccess: (user) => qc.setQueryData(meKey, user),
+  })
+}
+
 export function useLogout() {
   const qc = useQueryClient()
   return useMutation({
